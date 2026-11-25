@@ -3,6 +3,9 @@
 
 The program is deterministic: it always emits the same single reply,
 the entry itself, into entry.txt under MAKEFUN_OUTPUT_DIR.
+
+The reply must stay a single line under 160 chars: the bounty scores
+one-liners, so anything longer or multi-line would not be a valid entry.
 """
 
 import os
@@ -15,6 +18,8 @@ REPLY = (
 
 def main() -> None:
     # Guard: the entry must be a single line under 160 chars before writing.
+    # The 160-char ceiling is the bounty gate — the reply is 90 chars,
+    # comfortably inside it, and the assert fails loudly if it ever grows.
     assert "\n" not in REPLY, "entry must be a single line"
     assert len(REPLY) < 160, f"entry too long: {len(REPLY)} chars"
     output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
